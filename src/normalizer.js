@@ -418,20 +418,33 @@ var Normalizer = /** @class */ (function () {
     Normalizer.change = function (_a) {
         var input = _a.input, output = _a.output, loudness = _a.loudness, measured = _a.measured, padded = _a.padded, rest = __rest(_a, ["input", "output", "loudness", "measured", "padded"]);
         return new Promise(function (resolve, reject) {
-            var command = CommandFactory.change({ input: input, output: output, loudness: loudness, measured: measured });
+            var command = CommandFactory.change({ 
+                input: input, 
+                output: output, 
+                loudness: loudness, 
+                measured: measured 
+            });
             command.execute({
                 success: function (_a) {
                     var stdout = _a.stdout, stderr = _a.stderr;
                     if (padded) {
-                        Normalizer.removePadding(__assign({ input: input, output: output, loudness: loudness, measured: measured, padded: padded }, rest), resolve, reject);
+                        Normalizer.removePadding(__assign({ 
+                            input: input, 
+                            output: output, 
+                            loudness: loudness, 
+                            measured: measured, 
+                            padded: padded 
+                        }, rest), resolve, reject);
                     }
                     else {
                         return resolve({
                             normalized: true,
-                            info: __assign({ input: input,
+                            info: __assign({ 
+                                input: input,
                                 output: output,
                                 loudness: loudness,
-                                measured: measured }, rest)
+                                measured: measured 
+                            }, rest)
                         });
                     }
                 },
@@ -439,10 +452,12 @@ var Normalizer = /** @class */ (function () {
                     return reject({
                         normalized: false,
                         error: error,
-                        info: __assign({ input: input,
+                        info: __assign({ 
+                            input: input,
                             output: output,
                             loudness: loudness,
-                            measured: measured }, rest)
+                            measured: measured 
+                        }, rest)
                     });
                 }
             });
