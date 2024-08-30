@@ -261,6 +261,7 @@ var CommandFactory = /** @class */ (function () {
             text: command,
             processAfter: function () {
                 fs.unlinkSync(temporaryFile);
+                fs.unlinkSync(input);
             }
         });
     };
@@ -342,7 +343,7 @@ var Normalizer = /** @class */ (function () {
     Normalizer.addPadding = function (_a, resolve, reject) {
         var input = _a.input, output = _a.output, originalDuration = _a.originalDuration, rest = __rest(_a, ["input", "output", "originalDuration"]);
         var basename = path.basename(output);
-        var tempOutput = path.join(path.dirname(output), '__temporary.' + basename);
+        var tempOutput = path.join(path.dirname(output), '__temporary-a.' + basename);
         var command = CommandFactory.addPadding(input, tempOutput);
         command.execute({
             success: function (_a) {
@@ -417,10 +418,13 @@ var Normalizer = /** @class */ (function () {
     };
     Normalizer.change = function (_a) {
         var input = _a.input, output = _a.output, loudness = _a.loudness, measured = _a.measured, padded = _a.padded, rest = __rest(_a, ["input", "output", "loudness", "measured", "padded"]);
+
+        var temporaryFile = path.join(path.dirname(output), "__temporary-b."+path.basename(output));
+
         return new Promise(function (resolve, reject) {
             var command = CommandFactory.change({ 
                 input: input, 
-                output: output, 
+                output: padded ? temporaryFile : output, 
                 loudness: loudness, 
                 measured: measured 
             });
@@ -429,7 +433,7 @@ var Normalizer = /** @class */ (function () {
                     var stdout = _a.stdout, stderr = _a.stderr;
                     if (padded) {
                         Normalizer.removePadding(__assign({ 
-                            input: input, 
+                            input: temporaryFile,
                             output: output, 
                             loudness: loudness, 
                             measured: measured, 
